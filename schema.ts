@@ -182,8 +182,22 @@ export interface Database {
         Row: {
           id: string
           created_at: string
-          profile: Database['public']['Tables']['profiles']['Row']
-          school: Database['public']['Tables']['schools']['Row']
+          profile: {
+            id: string
+            updated_at: string
+            first_name: string
+            last_name: string
+            avatar_url: string
+            email: string
+          }
+          school: {
+            id: string
+            created_at: string
+            name: string
+            street_address: string
+            city: string
+            province: string
+          }
         }
         Insert: {
           id?: string

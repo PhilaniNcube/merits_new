@@ -1,7 +1,7 @@
 import { Toaster } from '@/components/ui/toaster'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
-import { Home, StepForwardIcon, User } from 'lucide-react'
+import { Building2Icon, Coins, CoinsIcon, Home, StepForwardIcon, User } from 'lucide-react'
 import "./globals.css";
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -10,6 +10,7 @@ import AuthWrapper from './login/AuthWrapper';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Fragment } from 'react';
 
 
 export const metadata = {
@@ -29,6 +30,9 @@ const {data: {session}} = await supabase.auth.getSession()
 
 const {data:profile, error} = await supabase.from('profiles').select('*').single()
 
+const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_admin').single()
+
+
   return (
     <html lang="en">
       <body className="flex h-screen w-full">
@@ -47,20 +51,24 @@ const {data:profile, error} = await supabase.from('profiles').select('*').single
                 Home
               </span>
             </Link>
-            <Link
-              href="/events"
-              className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
-            >
-              <StepForwardIcon size={24} />
-              <span className="hidden md:inline-block text-xl font-medium">
-                Events
-              </span>
-            </Link>
+            {session && (
+              <Fragment>
+                <Link
+                  href="/my-school"
+                  className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
+                >
+                  <Building2Icon size={24} />
+                  <span className="hidden md:inline-block text-xl font-medium">
+                    My School
+                  </span>
+                </Link>
+              </Fragment>
+            )}
           </div>
         </aside>
         <main className="flex-1 h-screen">
           <ScrollArea className="h-full">
-          {!session ? <AuthWrapper /> : <>{children}</>}
+            {!session ? <AuthWrapper /> : <>{children}</>}
           </ScrollArea>
         </main>
         <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[400px]">
@@ -87,8 +95,21 @@ const {data:profile, error} = await supabase.from('profiles').select('*').single
                   </span>
                 </section>
                 <Separator className="my-3" />
-                <div className="flex flex-col space-y-2 w-full">
-                 <Link href="/profile" className="flex space-x-2 items-center px-4 py-2 rounded-full hover:bg-stone-200 text-stone-700 shadow-md"><User /> My Profile</Link>
+                <div className="flex flex-col space-y-3 w-full">
+                  <Link
+                    href="/profile"
+                    className="flex space-x-2 items-center px-4 py-2  hover:bg-stone-200 text-stone-700 w-fit"
+                  >
+                    <User /> My Profile
+                  </Link>
+                  {school_admin && (
+                    <Link
+                      href="/merits"
+                      className="flex space-x-2 items-center px-4 py-2  hover:bg-stone-200 text-stone-700 w-fit"
+                    >
+                      <Coins /> Merits
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

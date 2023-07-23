@@ -157,7 +157,7 @@ const CreatePost = () => {
 
 
   return (
-    <div className="w-full border-b py-2 px-3">
+    <div className="sticky top-0 z-30 bg-white w-full border-b py-2 px-3">
       <Dialog>
         <DialogTrigger asChild>
           <Button>Create New Post</Button>
