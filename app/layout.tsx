@@ -101,12 +101,12 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
                       alt={session.user.user_metadata.first_name}
                     />
                     <AvatarFallback>
-                      {session.user.user_metadata.first_name[0]}
-                      {session.user.user_metadata.last_name[0]}
+                      {profile?.first_name[0]}
+                      {profile?.last_name[0]}
                     </AvatarFallback>
                   </Avatar>
                   <span className="text-lg flex flex-col font-medium">
-                    <h2>{session.user.user_metadata.first_name}</h2>
+                    <h2>{profile?.first_name}</h2>
                     <p className="text-xs">{profile?.email}</p>
                     <p className="text-xs">Total Merits: {points.data}</p>
                   </span>
