@@ -3,13 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { Database } from "@/schema";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 
 const Logout = () => {
+
+  const router = useRouter()
 
    const supabase = createClientComponentClient<Database>();
 
     const logout = async () => {
       await supabase.auth.signOut();
+      router.refresh();
     };
 
   return (
