@@ -1,7 +1,7 @@
 import { Toaster } from '@/components/ui/toaster'
 import Link from 'next/link'
 import { Separator } from '@/components/ui/separator'
-import { Building2Icon, Coins, CoinsIcon, Home, StepForwardIcon, User } from 'lucide-react'
+import { Building2Icon, Coins, CoinsIcon, Home, PlaySquareIcon, StepForwardIcon, User } from 'lucide-react'
 import "./globals.css";
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Fragment } from 'react';
+import Logout from './Logout';
 
 
 export const metadata = {
@@ -26,9 +27,17 @@ export default async function RootLayout({
 
   const supabase = createServerComponentClient<Database>({ cookies })
 
+
+
 const {data: {session}} = await supabase.auth.getSession()
 
 const {data:profile, error} = await supabase.from('profiles').select('*').single()
+
+const {data:student, error:student_error} = await supabase.from('students').select('*, profile(*), school(*)').eq('profile.id',profile?.id ).single()
+
+const points = await supabase.rpc("my_total_points", {'student_id':student?.id!});
+
+console.log(points)
 
 const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_admin').single()
 
@@ -51,6 +60,15 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
                 Home
               </span>
             </Link>
+            {/* <Link
+              href="/events"
+              className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
+            >
+              <PlaySquareIcon size={24} />
+              <span className="hidden md:inline-block text-xl font-medium">
+                Events
+              </span>
+            </Link> */}
             {session && (
               <Fragment>
                 <Link
@@ -74,9 +92,7 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
         <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[400px]">
           {session && (
             <div className="w-full flex flex-col items-center">
-              <Button className="w-full rounded-full bg-red-600">
-                Log Out
-              </Button>
+              <Logout />
               <div className="w-full mt-2">
                 <section className="flex w-full items-center space-x-3">
                   <Avatar className="flex ">
@@ -92,6 +108,7 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
                   <span className="text-lg flex flex-col font-medium">
                     <h2>{session.user.user_metadata.first_name}</h2>
                     <p className="text-xs">{profile?.email}</p>
+                    <p className="text-xs">Total Merits: {points.data}</p>
                   </span>
                 </section>
                 <Separator className="my-3" />

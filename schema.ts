@@ -248,6 +248,10 @@ export interface Database {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      my_total_points: {
+        Args: { student_id: string }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
