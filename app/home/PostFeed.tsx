@@ -6,7 +6,7 @@ const PostFeed = async () => {
 
   const supabase = createServerComponentClient({ cookies });
 
-  const { data: posts, error } = await supabase.from("posts").select("*, profile(*)");
+  const { data: posts, error } = await supabase.from("posts").select("*, profile(*)").order("created_at", {ascending: false});
 
   return (
     <div className="w-full mt-4">
