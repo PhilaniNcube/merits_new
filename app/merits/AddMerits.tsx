@@ -69,6 +69,8 @@ const AddMerits = ({students, types}:Props) => {
 
   console.log({students, types})
 
+  const [open, setOpen] = useState(false)
+
 
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState("");
@@ -102,6 +104,7 @@ const AddMerits = ({students, types}:Props) => {
         description: "You must be logged in to create a post",
       });
       reset({ student_id: "" });
+      setOpen(false);
       return;
     }
 
@@ -113,6 +116,7 @@ const AddMerits = ({students, types}:Props) => {
         description: "Student not found",
       });
       reset({ student_id: "" });
+      setOpen(false);
       return;
     }
 
@@ -137,6 +141,7 @@ const AddMerits = ({students, types}:Props) => {
       });
       reset({ student_id: "", points: "", type: "" });
       setLoading(false);
+      setOpen(false)
       return;
     } else if (post) {
       toast({
@@ -145,6 +150,7 @@ const AddMerits = ({students, types}:Props) => {
       });
       reset({ student_id: "",  points: "", type: "" });
       setLoading(false);
+      setOpen(false)
       router.refresh();
       return;
     }
@@ -157,7 +163,7 @@ const AddMerits = ({students, types}:Props) => {
 
   return (
     <div className="w-full border-b py-2 px-3">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button>Create New Post</Button>
         </DialogTrigger>

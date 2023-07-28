@@ -35,6 +35,10 @@ const {data:profile, error} = await supabase.from('profiles').select('*').eq('id
 
 console.log({profile})
 
+const {data: merits_view} = await supabase.from('merits_view').select('*').order("type")
+
+console.log({merits_view})
+
  const { data: student, error: student_error } = await supabase
    .from("students")
    .select("*")

@@ -240,6 +240,16 @@ export interface Database {
       }
     }
     Views: {
+      merits_view: {
+        Row: {
+          type: string | null
+          sum: number | null
+          profile_id: string | null
+          id: string | null
+          first_name: string | null
+          last_name: string | null
+        }
+      }
       students_profiles_view: {
         Row: {
           student_id: string | null
