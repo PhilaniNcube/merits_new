@@ -111,7 +111,7 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
           </main>
           <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[500px]">
             {session && (
-              <div className="w-full flex flex-col items-center">
+              <div className="w-full flex flex-col items-start">
                 <Logout />
                 <div className="w-full mt-2">
                   <section className="flex flex-col w-full items-start space-x-3">

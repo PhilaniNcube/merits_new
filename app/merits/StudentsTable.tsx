@@ -99,11 +99,7 @@ const StudentsTable = ({students, teacherId}:TableProps) => {
       setLoading(false);
       return
     }
-
-
   }
-
-
 
   return (
     <div className="w-full">
