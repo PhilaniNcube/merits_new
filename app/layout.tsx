@@ -33,11 +33,22 @@ const {data: {session}} = await supabase.auth.getSession()
 
 const {data:profile, error} = await supabase.from('profiles').select('*').single()
 
-const {data:student, error:student_error} = await supabase.from('students').select('*, profile(*), school(*)').eq('profile.id',profile?.id ).single()
+ const { data: student, error: student_error } = await supabase
+   .from("students")
+   .select("*")
+   .eq("profile", profile?.id)
+   .single();
 
-const points = await supabase.rpc("my_total_points", {'student_id':student?.id!});
+ const { data: merits, error: merits_error } = await supabase
+   .from("merits")
+   .select("*")
+   .eq("student", student?.id);
 
-console.log(points)
+   console.log("Merits",merits)
+
+// const points = await supabase.rpc("my_total_points", {'student_id':student?.id!});
+
+// console.log(points)
 
 const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_admin').single()
 
@@ -122,7 +133,19 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
                     <span className="text-lg flex flex-col font-medium">
                       <h2>{profile?.first_name}</h2>
                       <p className="text-xs">{profile?.email}</p>
-                      <p className="text-xs">Total Merits: {points.data}</p>
+                      {/* <p className="text-xs">Total Merits: {points.data}</p> */}
+                      {merits && merits.length > 0 ? (
+                        <div>
+                          {merits.map((merit) => (
+                            <span key={merit.id}>
+                              <small>{merit.type}</small>
+                              <small>{merit.points}</small>
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </span>
                   </section>
                   <Separator className="my-3" />

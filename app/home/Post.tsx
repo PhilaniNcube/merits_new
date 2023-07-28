@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/schema";
 import { createServerActionClient, createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -16,6 +17,12 @@ const Post = async ({post}:PostProps) => {
  const supabase = createServerComponentClient<Database>({ cookies });
 
  const {data: post_likes, error, count} = await supabase.from("post_likes").select("*", {count: "exact"}).eq("post_id", post.id)
+
+ const {data:student, error:student_error} = await supabase.from("students").select("*").eq("profile", post.profile.id).single();
+
+ const {data: merits, error:merits_error} = await supabase.from("merits").select("*").eq("student", student?.id)
+
+ const totalMerits = merits?.reduce((a, b) => a + (b.points || 0), 0) || 0;
 
  const addLike = async (formData: FormData) => {
    "use server";
@@ -56,9 +63,15 @@ const Post = async ({post}:PostProps) => {
         </Avatar>
         <div className="w-full @md:flex @md:space-x-2 @md:items-start">
           <div>
-            <small className="text-xs tex-stone-500">
-              {post.profile?.first_name} {post.profile?.last_name}
-            </small>
+            <span className="flex items-center justify-between min-w-[250px] max-w-sm">
+              <small className="text-xs tex-stone-500 ">
+                {post.profile?.first_name} {post.profile?.last_name}
+              </small>
+              <Badge className="text-xs tex-stone-500">
+                Merits: {totalMerits}
+              </Badge>
+            </span>
+
             <h2 className="text-md font-semibold">{post.title}</h2>
             <p className="text-sm leading-7">{post.description}</p>
           </div>
@@ -70,7 +83,7 @@ const Post = async ({post}:PostProps) => {
                 width={500}
                 height={400}
                 alt={post.title}
-                className="lg:w-[300px] my-2 aspect-auto lg:aspect-square object-cover rounded-md"
+                className="lg:w-[300px] my-2 aspect-square object-cover rounded-md"
               />
             )}
           </div>

@@ -105,6 +105,17 @@ const AddMerits = ({students, types}:Props) => {
       return;
     }
 
+    const {data:profile, error:profile_error} = await supabase.from("students").select("id").eq("id", data.student_id).single();
+
+    if(profile_error || !profile){
+      toast({
+        title: "Error",
+        description: "Student not found",
+      });
+      reset({ student_id: "" });
+      return;
+    }
+
     const { data: post, error } = await supabase
       .from("merits")
       .insert([
@@ -113,6 +124,7 @@ const AddMerits = ({students, types}:Props) => {
           student: data.student_id,
           type: data.type,
           points: +data.points,
+          profile_id: profile?.id!
         },
       ])
       .select("*");

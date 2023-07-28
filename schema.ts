@@ -33,6 +33,7 @@ export interface Database {
           awarded_by: Database['public']['Tables']['teachers']['Row']
           points: number
           student: Database['public']['Tables']['students']['Row']
+          profile_id: Database['public']['Tables']['profiles']['Row']
           type: string
         }
         Insert: {
@@ -41,6 +42,7 @@ export interface Database {
           awarded_by: string
           points: number
           student: string
+          profile_id: string
           type?: string
         }
         Update: {
@@ -49,6 +51,7 @@ export interface Database {
           awarded_by?: string
           points?: number
           student?: string
+          profile_id?: string
           type?: string
         }
       }
