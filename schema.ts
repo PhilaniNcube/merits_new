@@ -240,7 +240,18 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      students_profiles_view: {
+        Row: {
+          student_id: string | null
+          school_id: string | null
+          school_name: string | null
+          city: string | null
+          street_address: string | null
+          profile_id: string | null
+          first_name: string | null
+          last_name: string | null
+        }
+      }
     }
     Functions: {
       is_admin: {

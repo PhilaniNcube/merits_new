@@ -8,7 +8,9 @@ const page = async () => {
 
   const {data: {session}} = await supabase.auth.getSession();
 
-  const {data:student_account, error:student_account_error} = await supabase.from('students').select(`*, profile(*), school(*)`).eq('profile.id', session?.user.id).single();
+
+  const {data:student_account, error} = await supabase.from('students').select('*,profile(*), school(*)').eq('profile.id', session?.user.id).single()
+  console.log({ school_session: student_account });
 
 
 
@@ -16,7 +18,7 @@ const page = async () => {
     <div className="px-3 py-2">
       <h1 className="text-lg font-semibold">
         {/* <pre>{JSON.stringify(student_account, null, 2)}</pre> */}
-        {student_account?.school?.name}
+        {/* {student_account?.school?.name} */}
       </h1>
       <Separator className="my-3" />
     </div>
