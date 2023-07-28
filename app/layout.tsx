@@ -44,94 +44,109 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
 
   return (
     <html lang="en">
-      <body className="flex h-screen w-full">
-        <aside className="w-fit flex flex-col md:w-[200px] lg:w-[400px] p-2 md:p-4 lg:p-6 border-r ">
-          <Link href="/" className="font-semibold hover:text-stone-700">
+      <body className=" w-full">
+        <nav className="sticky sm:hidden w-full px-2 py-3 border-b flex items-center">
+          <Link href="/home" className="font-semibold hover:text-stone-700">
             Merits
           </Link>
-          <Separator className="my-3" />
-          <div className="mt-4">
+          {session && (
+            <div className="flex flex-1 justify-end items-center">
+              <Logout />
+            </div>
+          )}
+        </nav>
+        <div className="flex h-screen w-full">
+          <aside className="w-fit flex flex-col md:w-[200px] lg:w-[400px] p-2 md:p-4 lg:p-6 border-r ">
             <Link
               href="/home"
-              className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
+              className="hidden sm:flex font-semibold hover:text-stone-700"
             >
-              <Home size={24} />
-              <span className="hidden md:inline-block text-xl font-medium">
-                Home
-              </span>
+              Merits
             </Link>
-            {/* <Link
+            <Separator className="my-3 hidden sm:block" />
+            <div className="mt-4">
+              <Link
+                href="/home"
+                className="flex items-center space-x-4  py-2 rounded-lg hover:bg-stone-200 my-1"
+              >
+                <Home size={20} />
+                <span className="hidden md:inline-block text-xl font-medium">
+                  Home
+                </span>
+              </Link>
+              {/* <Link
               href="/events"
               className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
             >
-              <PlaySquareIcon size={24} />
+              <PlaySquareIcon size={20} />
               <span className="hidden md:inline-block text-xl font-medium">
                 Events
               </span>
             </Link> */}
-            {session && (
-              <Fragment>
-                <Link
-                  href="/my-school"
-                  className="flex items-center space-x-4 px-3 py-2 rounded-lg hover:bg-stone-200 my-1"
-                >
-                  <Building2Icon size={24} />
-                  <span className="hidden md:inline-block text-xl font-medium">
-                    My School
-                  </span>
-                </Link>
-              </Fragment>
-            )}
-          </div>
-        </aside>
-        <main className="flex-1 h-screen">
-          <ScrollArea className="h-full">
-            {!session ? <AuthWrapper /> : <>{children}</>}
-          </ScrollArea>
-        </main>
-        <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[400px]">
-          {session && (
-            <div className="w-full flex flex-col items-center">
-              <Logout />
-              <div className="w-full mt-2">
-                <section className="flex w-full items-center space-x-3">
-                  <Avatar className="flex ">
-                    <AvatarImage
-                      src={profile?.avatar_url}
-                      alt={session.user.user_metadata.first_name}
-                    />
-                    <AvatarFallback>
-                      {profile?.first_name[0]}
-                      {profile?.last_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-lg flex flex-col font-medium">
-                    <h2>{profile?.first_name}</h2>
-                    <p className="text-xs">{profile?.email}</p>
-                    <p className="text-xs">Total Merits: {points.data}</p>
-                  </span>
-                </section>
-                <Separator className="my-3" />
-                <div className="flex flex-col space-y-3 w-full">
+              {session && (
+                <Fragment>
                   <Link
-                    href="/profile"
-                    className="flex space-x-2 items-center px-4 py-2  hover:bg-stone-200 text-stone-700 w-fit"
+                    href="/my-school"
+                    className="flex items-center space-x-4 py-2 rounded-lg hover:bg-stone-200 my-1"
                   >
-                    <User /> My Profile
+                    <Building2Icon size={20} />
+                    <span className="hidden md:inline-block text-xl font-medium">
+                      My School
+                    </span>
                   </Link>
-                  {school_admin && (
+                </Fragment>
+              )}
+            </div>
+          </aside>
+          <main className="flex-1 h-screen px-2 lg:px-0">
+            <ScrollArea className="h-full">
+              {!session ? <AuthWrapper /> : <>{children}</>}
+            </ScrollArea>
+          </main>
+          <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[400px]">
+            {session && (
+              <div className="w-full flex flex-col items-center">
+                <Logout />
+                <div className="w-full mt-2">
+                  <section className="flex w-full items-center space-x-3">
+                    <Avatar className="flex ">
+                      <AvatarImage
+                        src={profile?.avatar_url}
+                        alt={session.user.user_metadata.first_name}
+                      />
+                      <AvatarFallback>
+                        {profile?.first_name[0]}
+                        {profile?.last_name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-lg flex flex-col font-medium">
+                      <h2>{profile?.first_name}</h2>
+                      <p className="text-xs">{profile?.email}</p>
+                      <p className="text-xs">Total Merits: {points.data}</p>
+                    </span>
+                  </section>
+                  <Separator className="my-3" />
+                  <div className="flex flex-col space-y-3 w-full">
                     <Link
-                      href="/merits"
+                      href="/profile"
                       className="flex space-x-2 items-center px-4 py-2  hover:bg-stone-200 text-stone-700 w-fit"
                     >
-                      <Coins /> Merits
+                      <User /> My Profile
                     </Link>
-                  )}
+                    {school_admin && (
+                      <Link
+                        href="/merits"
+                        className="flex space-x-2 items-center px-4 py-2  hover:bg-stone-200 text-stone-700 w-fit"
+                      >
+                        <Coins /> Merits
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </aside>
+            )}
+          </aside>
+        </div>
 
         <Toaster />
       </body>

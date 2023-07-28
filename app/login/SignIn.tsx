@@ -73,6 +73,7 @@ const SignUp = () => {
       });
       setLoading(false)
       router.refresh()
+      router.push('/home')
     }
   }
 

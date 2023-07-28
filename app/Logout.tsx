@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Database } from "@/schema";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { UserMinus2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const Logout = () => {
@@ -17,8 +18,12 @@ const Logout = () => {
     };
 
   return (
-    <Button onClick={logout} type="button" className="w-full rounded-full bg-red-600">
-      Log Out
+    <Button
+      onClick={logout}
+      type="button"
+      className="w-fit sm:w-full flex items-center space-x-3 py-1 justify-center rounded-full bg-red-600"
+    >
+      <UserMinus2 size={24} /> <span className="flex">Log Out</span>
     </Button>
   );
 };
