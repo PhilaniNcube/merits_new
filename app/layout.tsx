@@ -46,9 +46,9 @@ const {data:profile, error} = await supabase.from('profiles').select('*').single
 
    console.log("Merits",merits)
 
-// const points = await supabase.rpc("my_total_points", {'student_id':student?.id!});
+const {data:points, error:points_error, status} = await supabase.rpc("sum_points_by_profile_id").single();
 
-// console.log(points)
+console.log(points)
 
 const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_admin').single()
 
@@ -134,17 +134,8 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
                       <h2>{profile?.first_name}</h2>
                       <p className="text-xs">{profile?.email}</p>
                       {/* <p className="text-xs">Total Merits: {points.data}</p> */}
-                      {merits && merits.length > 0 ? (
-                        <div>
-                          {merits.map((merit) => (
-                            <span key={merit.id}>
-                              <small>{merit.type}</small>
-                              <small>{merit.points}</small>
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        ""
+                      {points && (
+                        <p className="text-xs">Total Merits: {points}</p>
                       )}
                     </span>
                   </section>

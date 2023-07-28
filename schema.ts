@@ -255,6 +255,10 @@ export interface Database {
         Args: { student_id: string }
         Returns: number
       }
+      sum_points_by_profile_id: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
