@@ -52,11 +52,11 @@ const StudentsTable = ({students, teacherId}:TableProps) => {
 
     e.preventDefault()
     setLoading(true)
-    const {points, type, student_id} = Object.fromEntries(new FormData(e.currentTarget))
+    const {points, type, student_id, profile_id} = Object.fromEntries(new FormData(e.currentTarget))
 
     console.log({points, type, student_id})
 
-    if(typeof student_id !== 'string' || typeof type !== 'string') {
+    if(typeof student_id !== 'string' || typeof type !== 'string' || typeof profile_id !== 'string') {
       toast({
         title: 'Error',
         description: 'Something went wrong: your inputs may be incorrect',
@@ -74,14 +74,15 @@ const StudentsTable = ({students, teacherId}:TableProps) => {
 
 
 
-    const {data, error} = await supabase.from('merits').insert([
+    const { data, error } = await supabase.from("merits").insert([
       {
         points: +points,
         type,
         awarded_by: teacherId,
         student: student_id,
-      }
-    ])
+        profile_id: profile_id,
+      },
+    ]);
 
     if(error) {
       toast({
@@ -102,7 +103,7 @@ const StudentsTable = ({students, teacherId}:TableProps) => {
 
   }
 
-   console.log({students})
+
 
   return (
     <div className="w-full">
@@ -152,6 +153,19 @@ const StudentsTable = ({students, teacherId}:TableProps) => {
                           name="student_id"
                           id="student_id"
                           value={student.id}
+                          // defaultValue={student.id}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="hidden">
+                        <Label htmlFor="profile_id" className="text-right">
+                          Stduent
+                        </Label>
+                        <Input
+                          type="text"
+                          name="profile_id"
+                          id="profile_id"
+                          value={student.profile.id}
                           // defaultValue={student.id}
                           className="col-span-3"
                         />

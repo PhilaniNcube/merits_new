@@ -21,7 +21,7 @@ const Logout = () => {
     <Button
       onClick={logout}
       type="button"
-      className="w-fit sm:w-full flex items-center space-x-3 py-1 justify-center rounded-full bg-red-600"
+      className="w-fit sm:w-full lg:w-[120px] flex items-center space-x-3 py-1 justify-center rounded-full bg-red-600"
     >
       <UserMinus2 size={24} /> <span className="flex">Log Out</span>
     </Button>

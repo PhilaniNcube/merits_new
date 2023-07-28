@@ -31,20 +31,15 @@ export default async function RootLayout({
 
 const {data: {session}} = await supabase.auth.getSession()
 
-const {data:profile, error} = await supabase.from('profiles').select('*').single()
+const {data:profile, error} = await supabase.from('profiles').select('*').eq('id', session?.user.id).single()
+
+console.log({profile})
 
  const { data: student, error: student_error } = await supabase
    .from("students")
    .select("*")
    .eq("profile", profile?.id)
    .single();
-
- const { data: merits, error: merits_error } = await supabase
-   .from("merits")
-   .select("*")
-   .eq("student", student?.id);
-
-   console.log("Merits",merits)
 
 const {data:points, error:points_error, status} = await supabase.rpc("sum_points_by_profile_id").single();
 
@@ -114,32 +109,38 @@ const {data:school_admin, error:admin_error} = await supabase.rpc('is_school_adm
               {!session ? <AuthWrapper /> : <>{children}</>}
             </ScrollArea>
           </main>
-          <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[400px]">
+          <aside className="hidden sm:flex items-center w-fit flex-col border-l p-2 md:p-4 lg:p-6 md:w-[200px] bg-zinc-100 lg:w-[500px]">
             {session && (
               <div className="w-full flex flex-col items-center">
                 <Logout />
                 <div className="w-full mt-2">
-                  <section className="flex w-full items-center space-x-3">
-                    <Avatar className="flex ">
-                      <AvatarImage
-                        src={profile?.avatar_url}
-                        alt={session.user.user_metadata.first_name}
-                      />
-                      <AvatarFallback>
-                        {profile?.first_name[0]}
-                        {profile?.last_name[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-lg flex flex-col font-medium">
-                      <h2>{profile?.first_name}</h2>
-                      <p className="text-xs">{profile?.email}</p>
-                      {/* <p className="text-xs">Total Merits: {points.data}</p> */}
-                      {points && (
-                        <p className="text-xs">Total Merits: {points}</p>
-                      )}
-                    </span>
+                  <section className="flex flex-col w-full items-start space-x-3">
+                    <div className="flex space-x-3">
+                      <Avatar className="flex ">
+                        <AvatarImage
+                          src={profile?.avatar_url}
+                          alt={session.user.user_metadata.first_name}
+                        />
+                        <AvatarFallback>
+                          {profile?.first_name[0]}
+                          {profile?.last_name[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="flex flex-col justify-start">
+                        <h2>
+                          {profile?.first_name} {profile?.last_name}
+                        </h2>
+                        <p className="text-xs">{profile?.email}</p>
+                      </span>
+                    </div>
                   </section>
                   <Separator className="my-3" />
+                  <span className="text-lg flex flex-col font-medium">
+                    {/* <p className="text-xs">Total Merits: {points.data}</p> */}
+                    {points && (
+                      <p className="text-lg">Total Merits : {points}</p>
+                    )}
+                  </span>
                   <div className="flex flex-col space-y-3 w-full">
                     <Link
                       href="/profile"
